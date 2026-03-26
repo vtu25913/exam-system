@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dynamic Online Examination & Result Processing System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg fixed-top glass-nav">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+      <div class="brand-icon"><i class="bi bi-mortarboard-fill"></i></div>
+      <span class="brand-text">ExamSystem</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <i class="bi bi-list text-white fs-4"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-center gap-2">
+        <li class="nav-item"><a class="nav-link text-white-75" href="#features">Features</a></li>
+        <li class="nav-item"><a class="nav-link text-white-75" href="#how">How It Works</a></li>
+        <li class="nav-item"><a class="nav-link text-white-75" href="#roles">Roles</a></li>
+        <li class="nav-item"><a class="nav-link text-white-75" href="#stats">Stats</a></li>
+        <li class="nav-item"><a class="btn btn-outline-light btn-sm px-3" href="/login">Login</a></li>
+        <li class="nav-item"><a class="btn btn-warning btn-sm px-3 fw-semibold" href="/register">Get Started</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero-section d-flex align-items-center">
+  <div class="hero-bg-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+  <div class="container position-relative">
+    <div class="row align-items-center">
+      <div class="col-lg-6 text-white">
+        <div class="badge-pill mb-3 animate-fade-up">
+          <i class="bi bi-lightning-fill me-1 text-warning"></i> Next-Gen Examination Platform
+        </div>
+        <h1 class="hero-title animate-fade-up delay-1">
+          Dynamic Online<br/>
+          <span class="text-gradient">Examination</span> &<br/>
+          Result Processing
+        </h1>
+        <p class="hero-sub animate-fade-up delay-2">
+          Conduct secure, timed, auto-evaluated exams online. Instant results, deep analytics, and a seamless experience for both admins and students.
+        </p>
+        <div class="d-flex gap-3 flex-wrap animate-fade-up delay-3">
+          <a href="/register" class="btn btn-warning btn-lg fw-bold px-4">
+            <i class="bi bi-rocket-takeoff me-2"></i>Start Free
+          </a>
+          <a href="#how" class="btn btn-outline-light btn-lg px-4">
+            <i class="bi bi-play-circle me-2"></i>See How It Works
+          </a>
+        </div>
+        <div class="hero-trust mt-4 animate-fade-up delay-4">
+          <span class="trust-item"><i class="bi bi-shield-check text-success me-1"></i>Secure JWT Auth</span>
+          <span class="trust-item"><i class="bi bi-clock text-warning me-1"></i>Auto Timer</span>
+          <span class="trust-item"><i class="bi bi-graph-up text-info me-1"></i>Live Analytics</span>
+        </div>
+      </div>
+      <div class="col-lg-6 d-none d-lg-flex justify-content-center">
+        <div class="hero-card-stack">
+          <div class="mock-card card-back"></div>
+          <div class="mock-card card-mid"></div>
+          <div class="mock-card card-front">
+            <div class="mock-header">
+              <span class="mock-dot red"></span>
+              <span class="mock-dot yellow"></span>
+              <span class="mock-dot green"></span>
+              <span class="ms-2 text-white-50 small">JavaScript Fundamentals</span>
+            </div>
+            <div class="mock-timer">⏱ 28:45</div>
+            <div class="mock-question">Which keyword declares a block-scoped variable?</div>
+            <div class="mock-options">
+              <div class="mock-opt">A. var</div>
+              <div class="mock-opt selected">B. let ✓</div>
+              <div class="mock-opt">C. function</div>
+              <div class="mock-opt">D. const</div>
+            </div>
+            <div class="mock-progress">
+              <div class="mock-bar"></div>
+            </div>
+            <div class="mock-footer">Q 3 of 10 &nbsp;|&nbsp; 2 answered</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS TICKER -->
+<section class="stats-bar" id="stats">
+  <div class="container">
+    <div class="row g-4 text-center">
+      <div class="col-6 col-md-3">
+        <div class="stat-num" data-target="5000">0</div>
+        <div class="stat-label">Students Enrolled</div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-num" data-target="320">0</div>
+        <div class="stat-label">Exams Conducted</div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-num" data-target="98">0</div>
+        <div class="stat-label">% Uptime</div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-num" data-target="12000">0</div>
+        <div class="stat-label">Results Processed</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section-pad" id="features">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <span class="section-tag">Features</span>
+      <h2 class="section-title">Everything You Need</h2>
+      <p class="section-sub">A complete platform built for modern online assessments</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#e8f4fd;color:#0d6efd">
+            <i class="bi bi-clock-history"></i>
+          </div>
+          <h5>Live Countdown Timer</h5>
+          <p>Real-time exam timer with color-coded warnings. Auto-submits when time expires — no manual intervention needed.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#fff3cd;color:#f59e0b">
+            <i class="bi bi-shuffle"></i>
+          </div>
+          <h5>Randomized Questions</h5>
+          <p>Questions are shuffled on every attempt, preventing answer sharing and ensuring exam integrity.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#d1fae5;color:#059669">
+            <i class="bi bi-check2-circle"></i>
+          </div>
+          <h5>Instant Auto-Evaluation</h5>
+          <p>Answers are evaluated server-side the moment the exam is submitted. Results appear instantly.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#fce7f3;color:#db2777">
+            <i class="bi bi-bar-chart-line"></i>
+          </div>
+          <h5>Deep Analytics</h5>
+          <p>Admin dashboard shows pass rates, average scores, highest/lowest performers per exam.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#ede9fe;color:#7c3aed">
+            <i class="bi bi-shield-lock"></i>
+          </div>
+          <h5>Anti-Cheat Protection</h5>
+          <p>Tab-switch detection, page-refresh warnings, and server-side answer validation keep exams fair.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#fee2e2;color:#dc2626">
+            <i class="bi bi-phone"></i>
+          </div>
+          <h5>Fully Responsive</h5>
+          <p>Works seamlessly on desktop, tablet, and mobile. Students can take exams from any device.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section-pad bg-light" id="how">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <span class="section-tag">Process</span>
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-sub">Simple 4-step flow from exam creation to result</p>
+    </div>
+    <div class="row g-0 position-relative">
+      <div class="steps-line d-none d-md-block"></div>
+      <div class="col-md-3 text-center step-item">
+        <div class="step-circle">1</div>
+        <h6 class="fw-bold mt-3">Admin Creates Exam</h6>
+        <p class="text-muted small">Set title, duration, passing marks and add MCQ questions with correct answers.</p>
+      </div>
+      <div class="col-md-3 text-center step-item">
+        <div class="step-circle">2</div>
+        <h6 class="fw-bold mt-3">Student Registers</h6>
+        <p class="text-muted small">Students sign up, browse available exams, and start with a single click.</p>
+      </div>
+      <div class="col-md-3 text-center step-item">
+        <div class="step-circle">3</div>
+        <h6 class="fw-bold mt-3">Take Timed Exam</h6>
+        <p class="text-muted small">Answer randomized MCQs with a live timer. Navigate freely between questions.</p>
+      </div>
+      <div class="col-md-3 text-center step-item">
+        <div class="step-circle">4</div>
+        <h6 class="fw-bold mt-3">Instant Results</h6>
+        <p class="text-muted small">Score, percentage, pass/fail status and full question review shown immediately.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLES -->
+<section class="section-pad" id="roles">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <span class="section-tag">User Roles</span>
+      <h2 class="section-title">Built for Two Worlds</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="role-card admin-card">
+          <div class="role-badge">Admin</div>
+          <h4 class="fw-bold text-white mb-3"><i class="bi bi-person-gear me-2"></i>Exam Administrator</h4>
+          <ul class="role-list">
+            <li><i class="bi bi-check-circle-fill"></i> Create & manage exams with MCQ questions</li>
+            <li><i class="bi bi-check-circle-fill"></i> Set duration, passing marks & schedule</li>
+            <li><i class="bi bi-check-circle-fill"></i> View all student results & analytics</li>
+            <li><i class="bi bi-check-circle-fill"></i> Add, activate or remove students</li>
+            <li><i class="bi bi-check-circle-fill"></i> Filter results by exam</li>
+          </ul>
+          <a href="/login" class="btn btn-light fw-semibold mt-3">Admin Login →</a>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="role-card student-card">
+          <div class="role-badge">Student</div>
+          <h4 class="fw-bold text-white mb-3"><i class="bi bi-person-check me-2"></i>Exam Taker</h4>
+          <ul class="role-list">
+            <li><i class="bi bi-check-circle-fill"></i> Register and login securely</li>
+            <li><i class="bi bi-check-circle-fill"></i> Browse & search available exams</li>
+            <li><i class="bi bi-check-circle-fill"></i> Take timed exams with question navigator</li>
+            <li><i class="bi bi-check-circle-fill"></i> Auto-submit when time expires</li>
+            <li><i class="bi bi-check-circle-fill"></i> View detailed result with review</li>
+          </ul>
+          <a href="/register" class="btn btn-light fw-semibold mt-3">Register Free →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULT PREVIEW -->
+<section class="section-pad bg-light">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-5">
+        <span class="section-tag">Results</span>
+        <h2 class="section-title mt-2">Instant, Detailed Results</h2>
+        <p class="text-muted">The moment a student submits, they see their score, percentage, pass/fail status, and a full question-by-question review with correct answers highlighted.</p>
+        <ul class="result-features">
+          <li><i class="bi bi-circle-fill text-success"></i> Score & percentage breakdown</li>
+          <li><i class="bi bi-circle-fill text-primary"></i> Correct / wrong / skipped count</li>
+          <li><i class="bi bi-circle-fill text-warning"></i> Time taken display</li>
+          <li><i class="bi bi-circle-fill text-danger"></i> Per-question answer review</li>
+        </ul>
+      </div>
+      <div class="col-lg-7">
+        <div class="result-mock card p-4 shadow-lg">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-bold mb-0">JavaScript Fundamentals — Result</h6>
+            <span class="badge bg-success fs-6">PASSED</span>
+          </div>
+          <div class="d-flex justify-content-center mb-3">
+            <div class="result-circle-mock">80%</div>
+          </div>
+          <div class="row g-2 text-center mb-3">
+            <div class="col-3"><div class="result-stat">4/5</div><small class="text-muted">Score</small></div>
+            <div class="col-3"><div class="result-stat text-success">4</div><small class="text-muted">Correct</small></div>
+            <div class="col-3"><div class="result-stat text-danger">1</div><small class="text-muted">Wrong</small></div>
+            <div class="col-3"><div class="result-stat text-secondary">0</div><small class="text-muted">Skipped</small></div>
+          </div>
+          <div class="mock-review-item correct-item">
+            <span class="badge bg-success me-2">Q1</span> Which keyword declares a block-scoped variable?
+            <span class="float-end text-success"><i class="bi bi-check-circle-fill"></i> +1</span>
+          </div>
+          <div class="mock-review-item wrong-item">
+            <span class="badge bg-danger me-2">Q2</span> What does typeof null return?
+            <span class="float-end text-danger"><i class="bi bi-x-circle-fill"></i> 0</span>
+          </div>
+          <div class="mock-review-item correct-item">
+            <span class="badge bg-success me-2">Q3</span> Which method adds to end of array?
+            <span class="float-end text-success"><i class="bi bi-check-circle-fill"></i> +1</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section text-center text-white">
+  <div class="cta-overlay"></div>
+  <div class="container position-relative">
+    <h2 class="fw-bold display-5 mb-3">Ready to Transform Your Exams?</h2>
+    <p class="lead mb-4 opacity-75">Join thousands of students and educators using ExamSystem today.</p>
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <a href="/register" class="btn btn-warning btn-lg fw-bold px-5">
+        <i class="bi bi-rocket-takeoff me-2"></i>Get Started Free
+      </a>
+      <a href="/login" class="btn btn-outline-light btn-lg px-5">Sign In</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer-section">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <div class="brand-icon small-icon"><i class="bi bi-mortarboard-fill"></i></div>
+          <span class="text-white fw-bold fs-5">ExamSystem</span>
+        </div>
+        <p class="text-white-50 small">Dynamic Online Examination & Result Processing System. Built with React, Node.js, and MongoDB.</p>
+      </div>
+      <div class="col-md-2">
+        <h6 class="text-white fw-semibold mb-3">Platform</h6>
+        <ul class="footer-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how">How It Works</a></li>
+          <li><a href="#roles">Roles</a></li>
+        </ul>
+      </div>
+      <div class="col-md-2">
+        <h6 class="text-white fw-semibold mb-3">Access</h6>
+        <ul class="footer-links">
+          <li><a href="/login">Login</a></li>
+          <li><a href="/register">Register</a></li>
+          <li><a href="/admin">Admin Panel</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h6 class="text-white fw-semibold mb-3">Tech Stack</h6>
+        <div class="d-flex flex-wrap gap-2">
+          <span class="tech-badge">React.js</span>
+          <span class="tech-badge">Node.js</span>
+          <span class="tech-badge">Express</span>
+          <span class="tech-badge">MongoDB</span>
+          <span class="tech-badge">JWT</span>
+          <span class="tech-badge">Bootstrap 5</span>
+        </div>
+      </div>
+    </div>
+    <hr class="border-secondary mt-4"/>
+    <div class="text-center text-white-50 small py-2">
+      © 2026 Dynamic Online Examination & Result Processing System. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
