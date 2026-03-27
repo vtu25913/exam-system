@@ -1,22 +1,25 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
 const bcrypt = require('bcryptjs');
+const sequelize = require('../config/db');
 
-const userSchema = new mongoose.Schema({
-  name:     { type: String, required: true, trim: true },
-  email:    { type: String, required: true, unique: true, lowercase: true },
-  password: { type: String, required: true, minlength: 6 },
-  role:     { type: String, enum: ['admin', 'student'], default: 'student' },
-  isActive: { type: Boolean, default: true },
-}, { timestamps: true });
+const User = sequelize.define('User', {
+  id:       { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+  name:     { type: DataTypes.STRING, allowNull: false },
+  email:    { type: DataTypes.STRING, allowNull: false, unique: true },
+  password: { type: DataTypes.STRING, allowNull: false },
+  role:     { type: DataTypes.ENUM('admin', 'student'), defaultValue: 'student' },
+  isActive: { type: DataTypes.BOOLEAN, defaultValue: true },
+}, { tableName: 'users', timestamps: true });
 
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
+User.beforeCreate(async (user) => {
+  user.password = await bcrypt.hash(user.password, 10);
+});
+User.beforeUpdate(async (user) => {
+  if (user.changed('password')) user.password = await bcrypt.hash(user.password, 10);
 });
 
-userSchema.methods.matchPassword = async function (entered) {
+User.prototype.matchPassword = function (entered) {
   return bcrypt.compare(entered, this.password);
 };
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = User;

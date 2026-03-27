@@ -57,12 +57,12 @@ export default function ResultDetail() {
 
       <h6 className="fw-bold mb-3">Question Review</h6>
       {exam?.questions?.map((q, i) => {
-        const ans = answers.find((a) => a.questionId === q._id);
+        const ans = answers.find((a) => String(a.questionId) === String(q._id || q.id));
         const sel = ans?.selectedAnswer;
         const correct = ans?.isCorrect;
         const skipped = sel === -1 || sel === undefined;
         return (
-          <div key={q._id} className={`card mb-3 border-${correct?'success':skipped?'secondary':'danger'}`}>
+          <div key={q._id || q.id} className={`card mb-3 border-${correct?'success':skipped?'secondary':'danger'}`}>
             <div className="card-header bg-white d-flex justify-content-between">
               <span className="fw-medium">Q{i+1}. {q.questionText}</span>
               <span className={`badge ${correct?'bg-success':skipped?'bg-secondary':'bg-danger'}`}>

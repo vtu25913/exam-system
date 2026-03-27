@@ -31,8 +31,8 @@ export default function TakeExam() {
     try {
       const timeTaken = startedAt.current ? Math.round((Date.now() - startedAt.current) / 1000) : 0;
       const answersArr = exam.questions.map((q) => ({
-        questionId: q._id,
-        selectedAnswer: answers[q._id] !== undefined ? answers[q._id] : -1,
+        questionId: q._id || q.id,
+        selectedAnswer: answers[q._id || q.id] !== undefined ? answers[q._id || q.id] : -1,
       }));
       await api.post('/results/submit', { examId: id, answers: answersArr, timeTaken });
       if (auto) toast.info('Time up! Auto-submitted.');
@@ -128,8 +128,8 @@ export default function TakeExam() {
                 </div>
                 <p className="fw-semibold fs-6 mb-4">{q.questionText}</p>
                 {q.options.map((opt, oi) => (
-                  <div key={oi} className={`q-option ${answers[q._id]===oi?'selected':''}`}
-                    onClick={() => setAnswers({...answers, [q._id]: oi})}>
+                  <div key={oi} className={`q-option ${answers[q._id||q.id]===oi?'selected':''}`}
+                    onClick={() => setAnswers({...answers, [q._id||q.id]: oi})}>
                     <span className="badge bg-light text-dark border">{String.fromCharCode(65+oi)}</span>
                     <span>{opt}</span>
                   </div>
@@ -153,7 +153,7 @@ export default function TakeExam() {
                 <div className="d-flex flex-wrap gap-1">
                   {exam.questions.map((_, i) => (
                     <button key={i} style={{width:36,height:36}}
-                      className={`btn btn-sm ${i===cur?'btn-primary':answers[exam.questions[i]._id]!==undefined?'btn-success':'btn-outline-secondary'}`}
+                      className={`btn btn-sm ${i===cur?'btn-primary':answers[exam.questions[i]._id||exam.questions[i].id]!==undefined?'btn-success':'btn-outline-secondary'}`}
                       onClick={() => setCur(i)}>{i+1}</button>
                   ))}
                 </div>

@@ -53,17 +53,7 @@ export default function Login() {
           No account? <Link to="/register" className="fw-semibold">Register here</Link>
         </p>
 
-        <div className="rounded-3 p-3 small mt-1" style={{background:'linear-gradient(135deg,#f5f3ff,#fdf2f8)',border:'1px solid #e9d5ff'}}>
-          <div className="fw-semibold mb-2" style={{color:'#6366f1'}}>🎯 Demo Credentials</div>
-          <div className="d-flex align-items-center gap-2 mb-1">
-            <span className="badge" style={{background:'linear-gradient(135deg,#6366f1,#8b5cf6)'}}>Admin</span>
-            <span className="text-muted">admin@exam.com / admin123</span>
-          </div>
-          <div className="d-flex align-items-center gap-2">
-            <span className="badge" style={{background:'linear-gradient(135deg,#14b8a6,#06b6d4)'}}>Student</span>
-            <span className="text-muted">alice@exam.com / student123</span>
-          </div>
-        </div>
+
       </div>
     </div>
   );

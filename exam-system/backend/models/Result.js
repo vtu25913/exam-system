@@ -1,24 +1,17 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/db');
 
-const answerSchema = new mongoose.Schema({
-  questionId:     { type: mongoose.Schema.Types.ObjectId },
-  selectedAnswer: { type: Number, default: -1 },
-  isCorrect:      { type: Boolean, default: false },
-  marks:          { type: Number, default: 0 },
-});
+const Result = sequelize.define('Result', {
+  id:          { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+  studentId:   { type: DataTypes.INTEGER, allowNull: false },
+  examId:      { type: DataTypes.INTEGER, allowNull: false },
+  answers:     { type: DataTypes.JSON, defaultValue: [] },
+  score:       { type: DataTypes.FLOAT, defaultValue: 0 },
+  totalMarks:  { type: DataTypes.FLOAT, defaultValue: 0 },
+  percentage:  { type: DataTypes.FLOAT, defaultValue: 0 },
+  passed:      { type: DataTypes.BOOLEAN, defaultValue: false },
+  timeTaken:   { type: DataTypes.INTEGER },
+  submittedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+}, { tableName: 'results', timestamps: true });
 
-const resultSchema = new mongoose.Schema({
-  student:     { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  exam:        { type: mongoose.Schema.Types.ObjectId, ref: 'Exam', required: true },
-  answers:     [answerSchema],
-  score:       { type: Number, default: 0 },
-  totalMarks:  { type: Number, default: 0 },
-  percentage:  { type: Number, default: 0 },
-  passed:      { type: Boolean, default: false },
-  timeTaken:   { type: Number },
-  submittedAt: { type: Date, default: Date.now },
-}, { timestamps: true });
-
-resultSchema.index({ student: 1, exam: 1 }, { unique: true });
-
-module.exports = mongoose.model('Result', resultSchema);
+module.exports = Result;

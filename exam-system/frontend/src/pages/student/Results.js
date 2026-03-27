@@ -20,7 +20,7 @@ export default function StudentResults() {
         ? <div className="text-center text-muted py-5"><i className="bi bi-trophy fs-1 d-block mb-2"></i>No results yet. Take an exam!</div>
         : <div className="row g-3">
           {results.map((r) => (
-            <div key={r._id} className="col-md-6">
+            <div key={r.id || r._id} className="col-md-6">
               <div className="card h-100">
                 <div className="card-body">
                   <div className="d-flex justify-content-between align-items-start mb-3">
@@ -36,7 +36,7 @@ export default function StudentResults() {
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
                     <span className="fw-bold fs-5">{r.percentage}%</span>
-                    <Link to={`/student/results/${r.exam?._id}`} className="btn btn-sm btn-outline-primary">
+                    <Link to={`/student/results/${r.exam?.id || r.examId}`} className="btn btn-sm btn-outline-primary">
                       <i className="bi bi-eye me-1"></i>Details
                     </Link>
                   </div>

@@ -23,7 +23,7 @@ export default function StudentDashboard() {
       ]);
       setExams(er.data.exams);
       setPages(er.data.pages);
-      setAttempted(rr.data.map((r) => r.exam?._id));
+      setAttempted(rr.data.map((r) => r.exam?.id || r.examId));
     } catch { toast.error('Failed to load exams'); }
     finally { setLoading(false); }
   };
@@ -57,7 +57,7 @@ export default function StudentDashboard() {
               : exams.map((ex) => {
                 const done = attempted.includes(ex._id);
                 return (
-                  <div key={ex._id} className="col-md-6 col-lg-4">
+                  <div key={ex.id} className="col-md-6 col-lg-4">
                     <div className="card exam-card h-100">
                       <div className="card-body">
                         <div className="d-flex justify-content-between align-items-start mb-2">
@@ -70,7 +70,7 @@ export default function StudentDashboard() {
                           <span><i className="bi bi-question-circle me-1"></i>{ex.questions?.length} Qs</span>
                           <span><i className="bi bi-star me-1"></i>{ex.totalMarks} marks</span>
                         </div>
-                        <button className={`btn btn-sm w-100 ${done?'btn-outline-success':'btn-primary'}`} onClick={() => go(ex._id)}>
+                        <button className={`btn btn-sm w-100 ${done?'btn-outline-success':'btn-primary'}`} onClick={() => go(ex.id)}>
                           {done ? <><i className="bi bi-eye me-1"></i>View Result</> : <><i className="bi bi-play-fill me-1"></i>Start Exam</>}
                         </button>
                       </div>

@@ -1,79 +1,85 @@
 const Result = require('../models/Result');
 const Exam = require('../models/Exam');
+const User = require('../models/User');
 
 exports.submitExam = async (req, res) => {
   try {
     const { examId, answers, timeTaken } = req.body;
-    if (await Result.findOne({ student: req.user._id, exam: examId }))
-      return res.status(400).json({ message: 'Exam already submitted' });
-    const exam = await Exam.findById(examId);
+    const existing = await Result.findOne({ where: { studentId: req.user.id, examId } });
+    if (existing) return res.status(400).json({ message: 'Exam already submitted' });
+
+    const exam = await Exam.findByPk(examId);
     if (!exam) return res.status(404).json({ message: 'Exam not found' });
 
     let score = 0;
-    const evaluated = exam.questions.map((q) => {
-      const sub = answers.find((a) => a.questionId === q._id.toString());
+    const evaluated = exam.questions.map((q, i) => {
+      const sub = answers.find((a) => String(a.questionId) === String(q.id || i));
       const selected = sub ? sub.selectedAnswer : -1;
       const isCorrect = selected === q.correctAnswer;
-      const marks = isCorrect ? q.marks : 0;
+      const marks = isCorrect ? (q.marks || 1) : 0;
       score += marks;
-      return { questionId: q._id, selectedAnswer: selected, isCorrect, marks };
+      return { questionId: q.id || i, selectedAnswer: selected, isCorrect, marks };
     });
 
     const percentage = exam.totalMarks > 0 ? Math.round((score / exam.totalMarks) * 10000) / 100 : 0;
     const result = await Result.create({
-      student: req.user._id, exam: examId, answers: evaluated,
+      studentId: req.user.id, examId, answers: evaluated,
       score, totalMarks: exam.totalMarks, percentage,
       passed: score >= exam.passingMarks, timeTaken,
     });
-    await result.populate('exam', 'title duration totalMarks passingMarks');
-    res.status(201).json(result);
-  } catch (err) {
-    if (err.code === 11000) return res.status(400).json({ message: 'Exam already submitted' });
-    res.status(500).json({ message: err.message });
-  }
+    res.status(201).json({ ...result.toJSON(), exam: { title: exam.title, duration: exam.duration, totalMarks: exam.totalMarks, passingMarks: exam.passingMarks } });
+  } catch (err) { res.status(500).json({ message: err.message }); }
 };
 
 exports.getMyResults = async (req, res) => {
   try {
-    const results = await Result.find({ student: req.user._id })
-      .populate('exam', 'title totalMarks passingMarks')
-      .sort({ submittedAt: -1 });
-    res.json(results);
+    const results = await Result.findAll({ where: { studentId: req.user.id }, order: [['submittedAt', 'DESC']] });
+    const enriched = await Promise.all(results.map(async (r) => {
+      const exam = await Exam.findByPk(r.examId, { attributes: ['id', 'title', 'totalMarks', 'passingMarks'] });
+      return { ...r.toJSON(), exam };
+    }));
+    res.json(enriched);
   } catch (err) { res.status(500).json({ message: err.message }); }
 };
 
 exports.getMyResultByExam = async (req, res) => {
   try {
-    const result = await Result.findOne({ student: req.user._id, exam: req.params.examId })
-      .populate('exam', 'title totalMarks passingMarks questions');
+    const result = await Result.findOne({ where: { studentId: req.user.id, examId: req.params.examId } });
     if (!result) return res.status(404).json({ message: 'Result not found' });
-    res.json(result);
+    const exam = await Exam.findByPk(result.examId);
+    res.json({ ...result.toJSON(), exam });
   } catch (err) { res.status(500).json({ message: err.message }); }
 };
 
 exports.getAllResults = async (req, res) => {
   try {
     const { examId, page = 1, limit = 20 } = req.query;
-    const query = examId ? { exam: examId } : {};
-    const total = await Result.countDocuments(query);
-    const results = await Result.find(query)
-      .populate('student', 'name email')
-      .populate('exam', 'title totalMarks')
-      .sort({ submittedAt: -1 })
-      .skip((page - 1) * limit)
-      .limit(Number(limit));
-    res.json({ results, total, page: Number(page), pages: Math.ceil(total / limit) });
+    const where = examId ? { examId } : {};
+    const offset = (page - 1) * limit;
+    const { count, rows } = await Result.findAndCountAll({ where, order: [['submittedAt', 'DESC']], limit: Number(limit), offset });
+    const enriched = await Promise.all(rows.map(async (r) => {
+      const student = await User.findByPk(r.studentId, { attributes: ['id', 'name', 'email'] });
+      const exam = await Exam.findByPk(r.examId, { attributes: ['id', 'title', 'totalMarks'] });
+      return { ...r.toJSON(), student, exam };
+    }));
+    res.json({ results: enriched, total: count, page: Number(page), pages: Math.ceil(count / limit) });
   } catch (err) { res.status(500).json({ message: err.message }); }
 };
 
 exports.getAnalytics = async (req, res) => {
   try {
-    const stats = await Result.aggregate([
-      { $group: { _id: '$exam', avgScore: { $avg: '$percentage' }, maxScore: { $max: '$percentage' }, minScore: { $min: '$percentage' }, totalAttempts: { $sum: 1 }, passed: { $sum: { $cond: ['$passed', 1, 0] } } } },
-      { $lookup: { from: 'exams', localField: '_id', foreignField: '_id', as: 'exam' } },
-      { $unwind: '$exam' },
-      { $project: { 'exam.title': 1, avgScore: 1, maxScore: 1, minScore: 1, totalAttempts: 1, passed: 1 } },
-    ]);
+    const results = await Result.findAll();
+    const examMap = {};
+    for (const r of results) {
+      if (!examMap[r.examId]) examMap[r.examId] = { scores: [], passed: 0 };
+      examMap[r.examId].scores.push(r.percentage);
+      if (r.passed) examMap[r.examId].passed++;
+    }
+    const stats = await Promise.all(Object.entries(examMap).map(async ([examId, data]) => {
+      const exam = await Exam.findByPk(examId, { attributes: ['id', 'title'] });
+      const avg = data.scores.reduce((a, b) => a + b, 0) / data.scores.length;
+      return { exam, avgScore: Math.round(avg * 100) / 100, maxScore: Math.max(...data.scores), minScore: Math.min(...data.scores), totalAttempts: data.scores.length, passed: data.passed };
+    }));
     res.json(stats);
   } catch (err) { res.status(500).json({ message: err.message }); }
 };

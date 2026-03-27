@@ -1,26 +1,16 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/db');
 
-const questionSchema = new mongoose.Schema({
-  questionText:  { type: String, required: true },
-  options:       [{ type: String, required: true }],
-  correctAnswer: { type: Number, required: true },
-  marks:         { type: Number, default: 1 },
-});
+const Exam = sequelize.define('Exam', {
+  id:           { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+  title:        { type: DataTypes.STRING, allowNull: false },
+  description:  { type: DataTypes.TEXT, defaultValue: '' },
+  duration:     { type: DataTypes.INTEGER, allowNull: false },
+  totalMarks:   { type: DataTypes.INTEGER, defaultValue: 0 },
+  passingMarks: { type: DataTypes.INTEGER, defaultValue: 0 },
+  isActive:     { type: DataTypes.BOOLEAN, defaultValue: true },
+  createdBy:    { type: DataTypes.INTEGER },
+  questions:    { type: DataTypes.JSON, defaultValue: [] },
+}, { tableName: 'exams', timestamps: true });
 
-const examSchema = new mongoose.Schema({
-  title:        { type: String, required: true, trim: true },
-  description:  { type: String, default: '' },
-  duration:     { type: Number, required: true },
-  totalMarks:   { type: Number, default: 0 },
-  passingMarks: { type: Number, default: 0 },
-  isActive:     { type: Boolean, default: true },
-  questions:    [questionSchema],
-  createdBy:    { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-}, { timestamps: true });
-
-examSchema.pre('save', function (next) {
-  this.totalMarks = this.questions.reduce((s, q) => s + q.marks, 0);
-  next();
-});
-
-module.exports = mongoose.model('Exam', examSchema);
+module.exports = Exam;
